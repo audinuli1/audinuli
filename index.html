@@ -21,10 +21,10 @@
 
     document.getElementById("dealForm").addEventListener("submit", function(e) {
       e.preventDefault();
-
+      
       const data = Object.fromEntries(new FormData(this).entries());
       tg.sendData(JSON.stringify(data));
-      tg.close();
+      tg.close(); // Можно убрать, если не хочешь закрывать WebApp после отправки
     });
   </script>
 </body>
