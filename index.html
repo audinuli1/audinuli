@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ввод сделки</title>
+</head>
+<body>
+  <h2>Ввод сделки</h2>
+  <form id="dealForm">
+    <label>Сумма (₽):<br><input type="number" name="amount" required></label><br><br>
+    <label>% обнала:<br><input type="number" name="percent" required></label><br><br>
+    <label>Курс $:<br><input type="number" name="rate" required></label><br><br>
+    <label>Название сервиса:<br><input type="text" name="service" required></label><br><br>
+    <label>Сотрудники (через запятую):<br><input type="text" name="employees" required></label><br><br>
+    <button type="submit">Отправить</button>
+  </form>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    document.getElementById("dealForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(this).entries());
+      tg.sendData(JSON.stringify(data));
+      tg.close();
+    });
+  </script>
+</body>
+</html>
