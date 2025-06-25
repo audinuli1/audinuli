@@ -25,5 +25,23 @@
       tg.close();
     });
   </script>
+  <script>
+  const tg = window.Telegram.WebApp;
+
+  document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = {
+      summa: document.getElementById("summa").value,
+      obnal: document.getElementById("obnal").value,
+      kurs: document.getElementById("kurs").value,
+      service: document.getElementById("service").value,
+      employees: document.getElementById("employees").value,
+    };
+
+    tg.sendData(JSON.stringify(formData));
+    tg.close(); // Можно убрать, если не хочешь закрывать окно
+  });
+</script>
 </body>
 </html>
