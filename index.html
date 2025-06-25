@@ -41,9 +41,10 @@
     <input type="number" id="rate" placeholder="Курс $" required>
     <input type="text" id="service" placeholder="Название сервиса" required>
     <input type="text" id="employees" placeholder="Сотрудники (через запятую)" required>
-    <button onclick="sendData()">Отправить</button>
+    <button id="submitBtn">Отправить</button>
+
     <script>
-        function sendData() {
+        document.getElementById("submitBtn").addEventListener("click", function () {
             const amount = document.getElementById('amount').value;
             const percent = document.getElementById('percent').value;
             const rate = document.getElementById('rate').value;
@@ -58,12 +59,15 @@
                 employees
             };
 
-            // Отправка данных в Telegram-бот
-            Telegram.WebApp.sendData(JSON.stringify(data));
+            alert("Отправка..."); // Проверка — должно всплыть окно
 
-            // Закрытие WebApp после отправки
-            Telegram.WebApp.close();
-        }
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.sendData(JSON.stringify(data));
+                Telegram.WebApp.close();
+            } else {
+                alert("❌ Telegram WebApp не инициализирован!");
+            }
+        });
     </script>
 </body>
 </html>
