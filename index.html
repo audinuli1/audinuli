@@ -47,17 +47,13 @@
       max-width: 400px;
       margin: 0 auto;
     }
-
-    .section.active {
-      display: block;
-    }
   </style>
 </head>
 <body>
 
   <h1>🧳 CASH BOT</h1>
 
-  <div class="menu">
+  <div class="menu" id="main-menu">
     <button onclick="showForm()">➕ Сделка</button>
     <button disabled>📊 Статистика</button>
     <button disabled>📁 Все сделки</button>
@@ -89,11 +85,20 @@
 
       <button type="submit">Отправить</button>
     </form>
+
+    <br>
+    <button onclick="goBack()">🔙 Назад</button>
   </div>
 
   <script>
     function showForm() {
-      document.getElementById("new-deal").classList.add("active");
+      document.getElementById("main-menu").style.display = "none";
+      document.getElementById("new-deal").style.display = "block";
+    }
+
+    function goBack() {
+      document.getElementById("new-deal").style.display = "none";
+      document.getElementById("main-menu").style.display = "flex";
     }
 
     document.getElementById('deal-form').addEventListener('submit', function (e) {
