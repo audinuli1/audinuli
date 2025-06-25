@@ -10,76 +10,67 @@
       background-color: #111;
       color: #eee;
       padding: 20px;
-    }
-    h1 {
       text-align: center;
     }
-    .nav {
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .menu {
       display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 30px;
     }
-    .nav button {
-      padding: 10px;
+
+    .menu button {
       background-color: #222;
-      border: 1px solid #444;
       color: white;
+      border: 1px solid #333;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: 0.2s;
+      width: 200px;
     }
-    .section {
+
+    .menu button:hover {
+      background-color: #333;
+    }
+
+    #formSection {
       display: none;
-    }
-    .section.active {
-      display: block;
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
 
-  <h1>💼 CASH BOT</h1>
+  <h1>🧳 CASH BOT</h1>
 
-  <div class="nav">
-    <button onclick="showSection('new-deal')">➕ Сделка</button>
-    <button onclick="showSection('stats')">📊 Статистика</button>
-    <button onclick="showSection('deals')">📁 Все сделки</button>
-    <button onclick="showSection('profile')">👤 Профиль</button>
+  <div class="menu">
+    <button onclick="showForm()">➕ Сделка</button>
+    <button disabled>📊 Статистика</button>
+    <button disabled>📁 Все сделки</button>
+    <button disabled>👤 Профиль</button>
   </div>
 
-  <div id="new-deal" class="section active">
+  <div id="formSection">
     <h2>➕ Ввод новой сделки</h2>
-    <!-- Тут будет форма (уже есть, просто перенесём сюда позже) -->
-  </div>
-
-  <div id="stats" class="section">
-    <h2>📊 Общая статистика</h2>
-    <div id="stats-content">Загрузка...</div>
-  </div>
-
-  <div id="deals" class="section">
-    <h2>📁 Все сделки</h2>
-    <div id="deals-content">Загрузка...</div>
-  </div>
-
-  <div id="profile" class="section">
-    <h2>👤 Профиль сотрудника</h2>
-    <input type="text" id="profile-id" placeholder="Введите ID (например: 45)">
-    <button onclick="loadProfile()">Показать</button>
-    <div id="profile-content">...</div>
+    <!-- Тут будет форма (подключим после) -->
   </div>
 
   <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    function loadProfile() {
-      const id = document.getElementById('profile-id').value.trim();
-      if (!id) return alert('Введите ID');
-      // Тут будет логика запроса профиля (позже)
-      document.getElementById('profile-content').innerText = `Загружаем данные для сотрудника #${id}...`;
+    function showForm() {
+      document.getElementById("formSection").style.display = "block";
     }
   </script>
 
 </body>
 </html>
+
