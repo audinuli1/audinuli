@@ -253,16 +253,13 @@ button {
     const salaryFund = usdAmount * 0.25;
     const perPerson = (salaryFund / people.length).toFixed(2);
 
-    const result = {
-      rubAmount,
-      percent,
-      rate,
-      name,
-      people,
-      salaryFund: salaryFund.toFixed(2),
-      perPerson,
-      type: "deal"
-    };
+   const result = {
+  amount: rubAmount,
+  percent: percent,
+  rate: rate,
+  service: name,
+  employees: people.join(",")
+};
 
     Telegram.WebApp.sendData(JSON.stringify(result));
   });
