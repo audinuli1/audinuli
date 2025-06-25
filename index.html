@@ -249,7 +249,7 @@ button {
     const people = document.getElementById("people").value.split(",").map(p => p.trim());
 
     const cleanAmount = rubAmount * (1 - percent / 100);
-<button id="submit" type="button">Отправить</button>
+    const usdAmount = cleanAmount / rate;
     const salaryFund = usdAmount * 0.25;
     const perPerson = (salaryFund / people.length).toFixed(2);
 
