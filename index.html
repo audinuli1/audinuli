@@ -87,7 +87,21 @@
   </form>
 </div>
 
+<script>
+  document.getElementById('deal-form').addEventListener('submit', function (e) {
+    e.preventDefault();
 
+    const data = Object.fromEntries(new FormData(this).entries());
+    const json = JSON.stringify(data);
+
+    if (window.Telegram.WebApp) {
+      Telegram.WebApp.sendData(json);
+    } else {
+      alert("WebApp не инициализирован!");
+    }
+  });
+</script>
+  
   <script>
     function showForm() {
       document.getElementById("formSection").style.display = "block";
