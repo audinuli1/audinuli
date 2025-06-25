@@ -196,72 +196,47 @@ button {
 </div>
 
   <div id="new-deal" class="section">
-    <h2>➕ Ввод новой сделки</h2>
-    <form id="deal-form">
-  <label>Сумма (₽):<br>
-    <input type="number" name="amount" id="rub" required>
-  </label><br><br>
+  <h2>➕ Ввод новой сделки</h2>
+  <form id="deal-form">
+    <label>Сумма (₽):<br>
+      <input type="number" name="rubAmount" id="rub" required>
+    </label><br><br>
 
-  <label>% Обнал:<br>
-    <input type="number" name="percent" id="percent" required>
-  </label><br><br>
+    <label>% Обнал:<br>
+      <input type="number" name="percent" id="percent" required>
+    </label><br><br>
 
-  <label>Курс ($):<br>
-    <input type="number" name="rate" id="rate" required>
-  </label><br><br>
+    <label>Курс ($):<br>
+      <input type="number" name="rate" id="rate" required>
+    </label><br><br>
 
-  <label>Название сделки:<br>
-    <input type="text" name="service" id="name" required>
-  </label><br><br>
+    <label>Название сделки:<br>
+      <input type="text" name="name" id="name" required>
+    </label><br><br>
 
-  <label>Сотрудники (через запятую):<br>
-    <input type="text" name="employees" id="people" placeholder="Напр: 1, 3, 40-(Г)">
-  </label><br><br>
+    <label>Сотрудники (через запятую):<br>
+      <input type="text" name="people" id="people" placeholder="Напр: 1, 3, 40-(Г)">
+    </label><br><br>
 
-  <button id="submit" type="button">Отправить</button>
-</form>
-    <br>
-    <button class="back-btn" onclick="goBack()">← Назад</button>
-  </div>
-
-  <script>
-    function showForm() {
-      document.getElementById("main-menu").style.display = "none";
-      document.getElementById("new-deal").style.display = "block";
-    }
-
-    function goBack() {
-      document.getElementById("new-deal").style.display = "none";
-      document.getElementById("main-menu").style.display = "grid";
-    }
-  </script>
+    <button id="submit" type="submit">Отправить</button>
+  </form>
+  <br>
+  <button class="back-btn" onclick="goBack()">← Назад</button>
+</div>
 
 <script>
   Telegram.WebApp.ready();
 
-  const submitBtn = document.getElementById("submit");
+  document.getElementById('deal-form').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-  submitBtn.addEventListener("click", () => {
-    const rubAmount = parseFloat(document.getElementById("rub").value);
-    const percent = parseFloat(document.getElementById("percent").value);
-    const rate = parseFloat(document.getElementById("rate").value);
-    const name = document.getElementById("name").value;
-    const people = document.getElementById("people").value.split(",").map(p => p.trim());
+    const data = Object.fromEntries(new FormData(this).entries());
+    data.people = data.people.split(',').map(p => p.trim());
+    data.rubAmount = parseFloat(data.rubAmount);
+    data.percent = parseFloat(data.percent);
+    data.rate = parseFloat(data.rate);
 
-    const cleanAmount = rubAmount * (1 - percent / 100);
-    const usdAmount = cleanAmount / rate; // 👈 вот этой строки не хватало
-    const salaryFund = usdAmount * 0.25;
-    const perPerson = (salaryFund / people.length).toFixed(2);
-
-   const result = {
-  amount: rubAmount,
-  percent: percent,
-  rate: rate,
-  service: name,
-  employees: people.join(",")
-};
-
-    Telegram.WebApp.sendData(JSON.stringify(result));
+    Telegram.WebApp.sendData(JSON.stringify(data));
   });
 </script>
 </body>
