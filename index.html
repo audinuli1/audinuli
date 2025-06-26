@@ -182,10 +182,10 @@ button {
   <span class="icon">💰</span>
   <p>Сделка</p>
 </div>
-  <div class="card">
-    <span class="icon">📊</span>
-    <p>Статистика</p>
-  </div>
+  <div class="card" onclick="openStats()">
+  <span class="icon">📊</span>
+  <p>Статистика</p>
+</div>
   <div class="card">
     <span class="icon">📋</span>
     <p>Все сделки</p>
@@ -234,6 +234,10 @@ button {
   function goBack() {
     document.getElementById("new-deal").style.display = "none";
     document.getElementById("main-menu").style.display = "grid";
+  }
+
+  function openStats() {
+    window.open('stats.html', '_blank');
   }
 
   // Инициализация Telegram WebApp
