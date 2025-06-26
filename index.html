@@ -265,6 +265,9 @@ button {
     try {
       // Отправляем данные в бот
       Telegram.WebApp.sendData(JSON.stringify(data));
+
+      console.log('🔍 Данные для отправки:', data);
+Telegram.WebApp.sendData(JSON.stringify(data));
       
       // Закрываем WebApp с небольшой задержкой
       setTimeout(() => {
