@@ -224,6 +224,18 @@ button {
   <button class="back-btn" onclick="goBack()">← Назад</button>
 </div>
 
+  <script>
+  function showForm() {
+    document.getElementById("main-menu").style.display = "none";
+    document.getElementById("new-deal").style.display = "block";
+  }
+
+  function goBack() {
+    document.getElementById("new-deal").style.display = "none";
+    document.getElementById("main-menu").style.display = "grid";
+  }
+</script>
+
 <script>
   Telegram.WebApp.ready();
 
