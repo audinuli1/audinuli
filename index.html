@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cash WebApp</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
   --color-primary: #1E88E5;
@@ -224,7 +225,7 @@ button {
   <button class="back-btn" onclick="goBack()">← Назад</button>
 </div>
 
-  <script>
+<script>
   function showForm() {
     document.getElementById("main-menu").style.display = "none";
     document.getElementById("new-deal").style.display = "block";
@@ -234,23 +235,20 @@ button {
     document.getElementById("new-deal").style.display = "none";
     document.getElementById("main-menu").style.display = "grid";
   }
-</script>
 
-<script>
+  // Инициализация Telegram WebApp
   Telegram.WebApp.ready();
-  
-  // Расширяем WebApp на весь экран
   Telegram.WebApp.expand();
 
   document.getElementById('deal-form').addEventListener('submit', function (e) {
     e.preventDefault();
     
-    console.log('🔍 Форма отправлена'); // Отладка
+    console.log('🔍 Форма отправлена');
     
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
-    // Обрабатываем поле people - разделяем по запятым
+    // Обрабатываем поле people
     data.people = data.people.split(',').map(p => p.trim()).filter(p => p.length > 0);
     
     // Конвертируем числа
@@ -258,17 +256,20 @@ button {
     data.percent = parseFloat(data.percent);
     data.rate = parseFloat(data.rate);
     
-    console.log('🔍 Данные для отправки:', data); // Отладка
+    console.log('🔍 Данные для отправки:', data);
     
-    // Показываем кнопку "Отправить" в Telegram
-    Telegram.WebApp.MainButton.setText("Отправить сделку");
-    Telegram.WebApp.MainButton.show();
-    
-    // Отправляем данные
-    Telegram.WebApp.sendData(JSON.stringify(data));
-    
-    // Закрываем WebApp
-    Telegram.WebApp.close();
+    try {
+      // Отправляем данные в бот
+      Telegram.WebApp.sendData(JSON.stringify(data));
+      
+      // Закрываем WebApp с небольшой задержкой
+      setTimeout(() => {
+        Telegram.WebApp.close();
+      }, 100);
+    } catch (error) {
+      console.error('Ошибка отправки данных:', error);
+      alert('Ошибка отправки данных: ' + error.message);
+    }
   });
 </script>
 </body>
