@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Статистика сотрудников</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --color-primary: #1E88E5;
+      --color-accent: #4CAF50;
+      --color-bg: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+      --color-card-bg: rgba(255, 255, 255, 0.75);
+      --color-text: #212121;
+      --color-border: #ddd;
+      --color-shadow: rgba(0, 0, 0, 0.1);
+      --radius: 16px;
+      --padding: 16px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--color-primary);
+    }
+
+    .stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .employee-card {
+      background: var(--color-card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 4px 12px var(--color-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--color-border);
+    }
+
+    .employee-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .employee-id {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+    }
+
+    .employee-deals {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .employee-earnings {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--color-accent);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 18px;
+      color: #666;
+    }
+
+    .error {
+      text-align: center;
+      padding: 40px 20px;
+      color: #f44336;
+      background: rgba(244, 67, 54, 0.1);
+      border-radius: var(--radius);
+      margin: 20px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .total-stats {
+      background: var(--color-card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px var(--color-shadow);
+    }
+
+    .total-stats h3 {
+      margin: 0 0 10px 0;
+      color: var(--color-primary);
+    }
+
+    .total-amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--color-accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>📊 Статистика сотрудников</h1>
+    </header>
+
+    <div id="loading" class="loading">
+      Загрузка статистики...
+    </div>
+
+    <div id="error" class="error" style="display: none;">
+      <h3>Ошибка загрузки данных</h3>
+      <p id="error-message"></p>
+    </div>
+
+    <div id="stats-container" style="display: none;">
+      <div class="total-stats">
+        <h3>Общая статистика</h3>
+        <div class="total-amount">$<span id="total-amount">0</span></div>
+        <div>Всего сделок: <span id="total-deals">0</span></div>
+      </div>
+
+      <div class="stats-list" id="stats-list">
+        <!-- Статистика сотрудников будет загружена здесь -->
+      </div>
+    </div>
+
+    <div id="empty-state" class="empty-state" style="display: none;">
+      <h3>📭 Нет данных</h3>
+      <p>Статистика пока пуста. Внесите первую сделку!</p>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    // Устанавливаем заголовок
+    tg.MainButton.hide();
+
+    async function loadStats() {
+      try {
+        // Получаем данные с вашего API
+        const response = await fetch('https://audinuli-replit.repl.co/api/employee-stats');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const stats = await response.json();
+        
+        document.getElementById('loading').style.display = 'none';
+        
+        if (stats.length === 0) {
+          document.getElementById('empty-state').style.display = 'block';
+          return;
+        }
+
+        // Показываем контейнер со статистикой
+        document.getElementById('stats-container').style.display = 'block';
+        
+        // Вычисляем общую статистику
+        const totalEarnings = stats.reduce((sum, emp) => sum + emp.total_earned, 0);
+        const totalDeals = stats.reduce((sum, emp) => sum + emp.deals_count, 0);
+        
+        document.getElementById('total-amount').textContent = totalEarnings.toFixed(2);
+        document.getElementById('total-deals').textContent = totalDeals;
+
+        // Отображаем статистику по сотрудникам
+        const statsList = document.getElementById('stats-list');
+        statsList.innerHTML = '';
+
+        stats.forEach(employee => {
+          const card = document.createElement('div');
+          card.className = 'employee-card';
+          
+          card.innerHTML = `
+            <div class="employee-info">
+              <div class="employee-id">Сотрудник #${employee.employee_id}</div>
+              <div class="employee-deals">${employee.deals_count} сделок</div>
+            </div>
+            <div class="employee-earnings">$${employee.total_earned.toFixed(2)}</div>
+          `;
+          
+          statsList.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error('Ошибка загрузки статистики:', error);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error-message').textContent = error.message;
+      }
+    }
+
+    // Загружаем статистику при загрузке страницы
+    loadStats();
+
+    // Обновляем статистику каждые 30 секунд
+    setInterval(loadStats, 30000);
+  </script>
+</body>
+</html>
