@@ -238,17 +238,37 @@ button {
 
 <script>
   Telegram.WebApp.ready();
+  
+  // Расширяем WebApp на весь экран
+  Telegram.WebApp.expand();
 
   document.getElementById('deal-form').addEventListener('submit', function (e) {
     e.preventDefault();
-
-    const data = Object.fromEntries(new FormData(this).entries());
-    data.people = data.people.split(',').map(p => p.trim());
+    
+    console.log('🔍 Форма отправлена'); // Отладка
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Обрабатываем поле people - разделяем по запятым
+    data.people = data.people.split(',').map(p => p.trim()).filter(p => p.length > 0);
+    
+    // Конвертируем числа
     data.rubAmount = parseFloat(data.rubAmount);
     data.percent = parseFloat(data.percent);
     data.rate = parseFloat(data.rate);
-
+    
+    console.log('🔍 Данные для отправки:', data); // Отладка
+    
+    // Показываем кнопку "Отправить" в Telegram
+    Telegram.WebApp.MainButton.setText("Отправить сделку");
+    Telegram.WebApp.MainButton.show();
+    
+    // Отправляем данные
     Telegram.WebApp.sendData(JSON.stringify(data));
+    
+    // Закрываем WebApp
+    Telegram.WebApp.close();
   });
 </script>
 </body>
