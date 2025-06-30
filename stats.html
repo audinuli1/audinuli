@@ -13,18 +13,15 @@
       background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
       min-height: 100vh;
     }
-    
     .container {
       max-width: 600px;
       margin: 0 auto;
     }
-    
     h1 {
       text-align: center;
       color: #1976D2;
       margin-bottom: 30px;
     }
-    
     .employee-card {
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
@@ -35,43 +32,36 @@
       justify-content: space-between;
       align-items: center;
     }
-    
     .employee-info {
       flex: 1;
     }
-    
     .employee-id {
       font-size: 18px;
       font-weight: bold;
       color: #1976D2;
     }
-    
     .deals-count {
       font-size: 12px;
       color: #666;
       margin-top: 2px;
     }
-    
     .earnings {
       font-size: 20px;
       font-weight: bold;
       color: #4CAF50;
     }
-    
     .loading {
       text-align: center;
       padding: 50px;
       font-size: 18px;
       color: #666;
     }
-    
     .error {
       text-align: center;
       padding: 50px;
       color: #f44336;
       font-size: 16px;
     }
-    
     .total-summary {
       background: rgba(33, 150, 243, 0.1);
       border-radius: 12px;
@@ -79,13 +69,11 @@
       margin-bottom: 20px;
       text-align: center;
     }
-    
     .total-amount {
       font-size: 24px;
       font-weight: bold;
       color: #1976D2;
     }
-    
     .total-label {
       font-size: 14px;
       color: #666;
@@ -96,71 +84,6 @@
 <body>
   <div class="container">
     <h1>📊 Статистика сотрудников</h1>
-    
     <div id="loading" class="loading">Загрузка...</div>
-    <div id="error" class="error" style="display: none;"></div>
-    <div id="content" style="display: none;">
-      <div class="total-summary">
-        <div class="total-amount" id="totalAmount">$0.00</div>
-        <div class="total-label">Общая сумма выплат</div>
-      </div>
-      <div id="employeesList"></div>
-    </div>
-  </div>
-
-  <script>
-    // Инициализация Telegram WebApp
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
-    }
-
-    // API URL вашего Replit сервера
-    const API_URL = 'https://cash-bot-audinuli-audinuli.replit.app';
-
-    async function loadStats() {
-      try {
-        const response = await fetch(`${API_URL}/api/employee-stats`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        const data = await response.json();
-        displayStats(data);
-      } catch (error) {
-        console.error('Ошибка загрузки:', error);
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').style.display = 'block';
-        document.getElementById('error').textContent = `Ошибка загрузки данных: ${error.message}`;
-      }
-    }
-
-    function displayStats(employees) {
-      const loading = document.getElementById('loading');
-      const content = document.getElementById('content');
-      const employeesList = document.getElementById('employeesList');
-      const totalAmount = document.getElementById('totalAmount');
-
-      loading.style.display = 'none';
-      content.style.display = 'block';
-
-      // Рассчитываем общую сумму
-      const total = employees.reduce((sum, emp) => sum + emp.total_earned, 0);
-      totalAmount.textContent = `$${total.toFixed(2)}`;
-
-      // Создаем карточки сотрудников
-      employeesList.innerHTML = employees.map(employee => `
-        <div class="employee-card">
-          <div class="employee-info">
-            <div class="employee-id">Сотрудник №${employee.employee_id}</div>
-            <div class="deals-count">${employee.deals_count} сделок</div>
-          </div>
-          <div class="earnings">$${employee.total_earned.toFixed(2)}</div>
-        </div>
-      `).join('');
-    }
-
-    // Загружаем данные при загрузке страницы
-    loadStats();
-  </script>
-  <script src="stats.js"></script>
-</body>
-</html>
+    <div id="error-message" class="error" style="display: none;"></div>
+    <div id="content" style="d
