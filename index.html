@@ -263,20 +263,27 @@ button {
     console.log('🔍 Данные для отправки:', data);
     
     try {
-      // Отправляем данные в бот
-      Telegram.WebApp.sendData(JSON.stringify(data));
-
-      console.log('🔍 Данные для отправки:', data);
-Telegram.WebApp.sendData(JSON.stringify(data));
-      
-      // Закрываем WebApp с небольшой задержкой
-      setTimeout(() => {
-        Telegram.WebApp.close();
-      }, 100);
-    } catch (error) {
-      console.error('Ошибка отправки данных:', error);
-      alert('Ошибка отправки данных: ' + error.message);
-    }
+  fetch('https://be035b8b-7ef1-4929-bba8-f45362e2dc77-00-2br6m7r9brek6.picard.replit.dev/api/deal', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log('✅ Сделка отправлена:', result);
+    alert('Сделка сохранена!');
+    Telegram.WebApp.close();
+  })
+  .catch(error => {
+    console.error('❌ Ошибка отправки:', error);
+    alert('Ошибка при отправке сделки');
+  });
+} catch (error) {
+  console.error('Ошибка отправки данных:', error);
+  alert('Ошибка отправки данных: ' + error.message);
+}
   });
 </script>
 </body>
