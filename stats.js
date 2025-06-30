@@ -12,7 +12,9 @@ async function loadStats() {
     const employeesList = document.getElementById('employeesList');
     const totalAmount = document.getElementById('totalAmount');
 
-    const total = employees.reduce((sum, emp) => sum + emp.total_earned, 0);
+    const total = Array.isArray(employees)
+  ? employees.reduce((acc, emp) => acc + emp.total_payout, 0)
+  : 0;
     totalAmount.textContent = `$${total.toFixed(2)}`;
 
     employeesList.innerHTML = employees.map(emp => `
