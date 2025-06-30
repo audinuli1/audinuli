@@ -11,10 +11,19 @@ async function loadStats() {
 
     const employeesList = document.getElementById('employeesList');
     const totalAmount = document.getElementById('totalAmount');
+    const errorMessage = document.getElementById('error-message');
 
+    // Убрать сообщение об ошибке, если данные загружены корректно
+    if (errorMessage) {
+      errorMessage.textContent = '';
+      errorMessage.style.display = 'none';
+    }
+
+    // Посчитать общую сумму
     const total = Array.isArray(employees)
-  ? employees.reduce((acc, emp) => acc + emp.total_payout, 0)
-  : 0;
+      ? employees.reduce((acc, emp) => acc + emp.total_payout, 0)
+      : 0;
+
     totalAmount.textContent = `$${total.toFixed(2)}`;
 
     employeesList.innerHTML = employees.map(emp => `
@@ -26,7 +35,13 @@ async function loadStats() {
     `).join('');
   } catch (error) {
     console.error('Ошибка загрузки статистики:', error);
+    const errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+      errorMessage.textContent = 'Ошибка загрузки статистики. Проверьте подключение или API.';
+      errorMessage.style.display = 'block';
+    }
   }
 }
 
 loadStats();
+
