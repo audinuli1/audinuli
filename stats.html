@@ -86,4 +86,64 @@
     <h1>📊 Статистика сотрудников</h1>
     <div id="loading" class="loading">Загрузка...</div>
     <div id="error-message" class="error" style="display: none;"></div>
-    <div id="content" style="d
+    <div id="content" style="display: none;">
+      <div class="total-summary">
+        <div class="total-amount" id="totalAmount">$0.00</div>
+        <div class="total-label">Общая сумма выплат</div>
+      </div>
+      <div id="employeesList"></div>
+    </div>
+  </div>
+
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+    }
+
+    const API_URL = 'https://cash-bot-audinuli-audinuli.replit.app';
+
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_URL}/api/employee-stats`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        displayStats(data);
+      } catch (error) {
+        console.error('Ошибка загрузки:', error);
+        document.getElementById('loading').style.display = 'none';
+        const errBox = document.getElementById('error-message');
+        errBox.style.display = 'block';
+        errBox.textContent = `Ошибка загрузки данных: ${error.message}`;
+      }
+    }
+
+    function displayStats(statsObj) {
+      const employees = Object.entries(statsObj).map(([id, stats]) => ({
+        employee_id: id,
+        ...stats
+      }));
+
+      const total = employees.reduce((acc, emp) => acc + emp.total_earned, 0);
+      document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+
+      const employeesList = document.getElementById('employeesList');
+      employeesList.innerHTML = employees.map(emp => `
+        <div class="employee-card">
+          <div class="employee-info">
+            <div class="employee-id">Сотрудник №${emp.employee_id}</div>
+            <div class="deals-count">${emp.deals_count} сделок</div>
+          </div>
+          <div class="earnings">$${emp.total_earned.toFixed(2)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>
