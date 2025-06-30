@@ -1,12 +1,30 @@
-fetch("https://be035b8b-7ef1-4929-bba8-f45362e2dc77-00-2br6m7r9brek6.picard.replit.dev/api/employee-stats")
-  .then(response => response.json())
-  .then(data => {
-    console.log("📊 Статистика получена:", data);
+async function loadStats() {
+  try {
+    const response = await fetch('/api/employee-stats');
+    const data = await response.json();
 
-    // Здесь можно будет позже обновлять DOM-элементы на странице, например:
-    // document.getElementById("totalDeals").textContent = data.total_deals;
-    // document.getElementById("totalAmount").textContent = data.total_amount;
-  })
-  .catch(error => {
-    console.error("❌ Ошибка при получении статистики:", error);
-  });
+    // Преобразуем объект в массив
+    const employees = Object.entries(data).map(([id, stats]) => ({
+      employee_id: id,
+      ...stats
+    }));
+
+    const employeesList = document.getElementById('employeesList');
+    const totalAmount = document.getElementById('totalAmount');
+
+    const total = employees.reduce((sum, emp) => sum + emp.total_earned, 0);
+    totalAmount.textContent = `$${total.toFixed(2)}`;
+
+    employeesList.innerHTML = employees.map(emp => `
+      <div class="employee-card">
+        <div class="employee-id">Сотрудник №${emp.employee_id}</div>
+        <div class="deals-count">${emp.deals_count} сделок</div>
+        <div class="earnings">$${emp.total_earned.toFixed(2)}</div>
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error('Ошибка загрузки статистики:', error);
+  }
+}
+
+loadStats();
