@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const response = await fetch("https://cash-bot.vercel.app/api/deals");
+  const response = await fetch("https://be035b8b-7ef1-4929-bba8-f45362e2dc77-00-2br6m7r9brek6.picard.replit.dev/api/deals");
   const data = await response.json();
 
   const container = document.getElementById("deals-list");
