@@ -186,10 +186,10 @@ button {
   <span class="icon">📊</span>
   <p>Статистика</p>
 </div>
-  <div class="card">
-    <span class="icon">📋</span>
-    <p>Все сделки</p>
-  </div>
+  <div class="card" id="deals-btn">
+  <span class="icon">📋</span>
+  <p>Все сделки</p>
+</div>
   <div class="card">
     <span class="icon">👤</span>
     <p>Профиль</p>
@@ -226,65 +226,58 @@ button {
 </div>
 
 <script>
-  function showForm() {
-    document.getElementById("main-menu").style.display = "none";
-    document.getElementById("new-deal").style.display = "block";
-  }
+  window.onload = function () {
+    function showForm() {
+      document.getElementById("main-menu").style.display = "none";
+      document.getElementById("new-deal").style.display = "block";
+    }
 
-  function goBack() {
-    document.getElementById("new-deal").style.display = "none";
-    document.getElementById("main-menu").style.display = "grid";
-  }
+    function goBack() {
+      document.getElementById("new-deal").style.display = "none";
+      document.getElementById("main-menu").style.display = "grid";
+    }
 
-  function openStats() {
-    window.open('stats.html', '_blank');
-  }
+    function openStats() {
+      window.open('stats.html', '_blank');
+    }
 
-  // Инициализация Telegram WebApp
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
+    document.getElementById("deals-btn").addEventListener("click", () => {
+      window.open("deals.html", "_blank");
+    });
 
-  document.getElementById('deal-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    
-    console.log('🔍 Форма отправлена');
-    
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Обрабатываем поле people
-    data.people = data.people.split(',').map(p => p.trim()).filter(p => p.length > 0);
-    
-    // Конвертируем числа
-    data.rubAmount = parseFloat(data.rubAmount);
-    data.percent = parseFloat(data.percent);
-    data.rate = parseFloat(data.rate);
-    
-    console.log('🔍 Данные для отправки:', data);
-    
-    try {
-  fetch('https://be035b8b-7ef1-4929-bba8-f45362e2dc77-00-2br6m7r9brek6.picard.replit.dev/api/deal', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(result => {
-    console.log('✅ Сделка отправлена:', result);
-    alert('Сделка сохранена!');
-    Telegram.WebApp.close();
-  })
-  .catch(error => {
-    console.error('❌ Ошибка отправки:', error);
-    alert('Ошибка при отправке сделки');
-  });
-} catch (error) {
-  console.error('Ошибка отправки данных:', error);
-  alert('Ошибка отправки данных: ' + error.message);
-}
-  });
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+
+    document.getElementById('deal-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      data.people = data.people.split(',').map(p => p.trim()).filter(p => p.length > 0);
+      data.rubAmount = parseFloat(data.rubAmount);
+      data.percent = parseFloat(data.percent);
+      data.rate = parseFloat(data.rate);
+
+      fetch('https://be035b8b-7ef1-4929-bba8-f45362e2dc77-00-2br6m7r9brek6.picard.replit.dev/api/deal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(result => {
+          alert('Сделка сохранена!');
+          Telegram.WebApp.close();
+        })
+        .catch(error => {
+          alert('Ошибка при отправке сделки');
+          console.error(error);
+        });
+    });
+  };
+</script>
 </script>
 </body>
 </html>
