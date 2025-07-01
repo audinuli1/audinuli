@@ -12,15 +12,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.className = "bg-white rounded-xl p-4 shadow";
 
     card.innerHTML = `
-      <div class="text-lg font-semibold mb-1">#${index + 1} — ${deal.name}</div>
-      <div><strong>Дата:</strong> ${new Date(deal.timestamp).toLocaleString()}</div>
-      <div><strong>Сумма RUB:</strong> ${deal.rub.toLocaleString()}</div>
-      <div><strong>% Обнала:</strong> ${deal.percent}%</div>
-      <div><strong>Курс:</strong> ${deal.rate}</div>
-      <div><strong>Чистыми $:</strong> ${deal.clean_usd.toFixed(2)}</div>
-      <div><strong>Распределено:</strong> $${deal.total_distributed.toFixed(2)}</div>
-      <div><strong>Сотрудники:</strong> ${deal.employees.join(", ")}</div>
-    `;
+  <h2>💼 ${deal.name || 'Без названия'}</h2>
+  <p>💸 <strong>Сумма:</strong> ${deal.rubAmount} ₽</p>
+  <p>📉 <strong>Обналичка:</strong> ${deal.percent} %</p>
+  <p>💱 <strong>Курс:</strong> ${deal.rate}</p>
+  <p>👥 <strong>Сотрудники:</strong> ${deal.people.join(', ')}</p>
+  <p>🕒 <strong>Дата:</strong> ${new Date(deal.timestamp || deal.date).toLocaleString()}</p>
+`;
     container.appendChild(card);
   });
 });
