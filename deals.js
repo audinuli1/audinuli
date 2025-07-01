@@ -13,12 +13,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     card.innerHTML = `
   <h2>💼 ${deal.name || 'Без названия'}</h2>
-  <p>💸 <strong>Сумма:</strong> ${deal.rubAmount} ₽</p>
+  <p>💸 <strong>Сумма:</strong> ${deal.rub} ₽</p>
   <p>📉 <strong>Обналичка:</strong> ${deal.percent} %</p>
   <p>💱 <strong>Курс:</strong> ${deal.rate}</p>
-  <p>👥 <strong>Сотрудники:</strong> ${Array.isArray(deal.people) ? deal.people.join(', ') : '—'}</p>
+  <p>👥 <strong>Сотрудники:</strong> ${Array.isArray(deal.employees) ? deal.employees.join(', ') : '—'}</p>
   <p>🕒 <strong>Дата:</strong> ${new Date(deal.timestamp || deal.date).toLocaleString()}</p>
 `;
     container.appendChild(card);
   });
 });
+
