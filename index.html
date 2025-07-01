@@ -226,21 +226,23 @@ button {
 </div>
 
 <script>
+  // 👇 ВЫНЕСИ ИХ НАВЕРХ
+  function showForm() {
+    document.getElementById("main-menu").style.display = "none";
+    document.getElementById("new-deal").style.display = "block";
+  }
+
+  function openStats() {
+    window.open('stats.html', '_blank');
+  }
+
+  function goBack() {
+    document.getElementById("new-deal").style.display = "none";
+    document.getElementById("main-menu").style.display = "grid";
+  }
+
+  // 👇 ОСТАВЬ window.onload только для Telegram и form
   window.onload = function () {
-    function showForm() {
-      document.getElementById("main-menu").style.display = "none";
-      document.getElementById("new-deal").style.display = "block";
-    }
-
-    function goBack() {
-      document.getElementById("new-deal").style.display = "none";
-      document.getElementById("main-menu").style.display = "grid";
-    }
-
-    function openStats() {
-      window.open('stats.html', '_blank');
-    }
-
     document.getElementById("deals-btn").addEventListener("click", () => {
       window.open("deals.html", "_blank");
     });
@@ -277,6 +279,7 @@ button {
         });
     });
   };
+</script>
 </script>
 </script>
 </body>
