@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   <p>💸 <strong>Сумма:</strong> ${deal.rubAmount} ₽</p>
   <p>📉 <strong>Обналичка:</strong> ${deal.percent} %</p>
   <p>💱 <strong>Курс:</strong> ${deal.rate}</p>
-  <p>👥 <strong>Сотрудники:</strong> ${deal.people.join(', ')}</p>
+  <p>👥 <strong>Сотрудники:</strong> ${Array.isArray(deal.people) ? deal.people.join(', ') : '—'}</p>
   <p>🕒 <strong>Дата:</strong> ${new Date(deal.timestamp || deal.date).toLocaleString()}</p>
 `;
     container.appendChild(card);
