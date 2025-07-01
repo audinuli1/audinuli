@@ -13,13 +13,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     card.innerHTML = `
   <h2>💼 ${deal.name || 'Без названия'}</h2>
-  <p>💸 <strong>Сумма:</strong> ${deal.rub} ₽</p>
-  <p>📉 <strong>Обналичка:</strong> ${deal.percent} %</p>
-  <p>💱 <strong>Курс:</strong> ${deal.rate}</p>
-  <p>👥 <strong>Сотрудники:</strong> ${Array.isArray(deal.employees) ? deal.employees.join(', ') : '—'}</p>
-  <p>🕒 <strong>Дата:</strong> ${new Date(deal.timestamp || deal.date).toLocaleString()}</p>
+  <button class="toggle-details">Показать детали</button>
+  <div class="deal-details" style="display: none; margin-top: 10px;">
+    <p>💸 <strong>Сумма:</strong> ${deal.rub} ₽</p>
+    <p>📉 <strong>Обналичка:</strong> ${deal.percent} %</p>
+    <p>💱 <strong>Курс:</strong> ${deal.rate}</p>
+    <p>👥 <strong>Сотрудники:</strong> ${Array.isArray(deal.employees) ? deal.employees.join(', ') : '—'}</p>
+    <p>🕒 <strong>Дата:</strong> ${new Date(deal.timestamp || deal.date).toLocaleString()}</p>
+  </div>
 `;
     container.appendChild(card);
+    card.querySelector('.toggle-details').addEventListener('click', () => {
+  const details = card.querySelector('.deal-details');
+  const isVisible = details.style.display === 'block';
+  details.style.display = isVisible ? 'none' : 'block';
+  card.querySelector('.toggle-details').textContent = isVisible ? 'Показать детали' : 'Скрыть детали';
+});
   });
 });
 
